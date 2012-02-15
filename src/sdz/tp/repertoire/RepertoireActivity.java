@@ -275,17 +275,13 @@ public class RepertoireActivity extends ListActivity {
      *
      */
     private class RepertoireAdapter extends BaseAdapter {
-    	/**
-    	 * La liste des contacts de notre répertoire
-    	 */
+    	/** La liste des contacts de notre répertoire */
     	private ArrayList<Contact> mListe = new ArrayList<Contact>();
-    	/**
-    	 * Le LayoutInflater de notre activité pour récupèrer certaines vues
-    	 */
+    	/** Le LayoutInflater de notre activité pour récupèrer certaines vues */
     	private LayoutInflater mInflater = null;
     	
     	public RepertoireAdapter() {
-    		//On récupère le LayoutInflater de note activité
+    		//On récupère le LayoutInflater de notre activité
     		mInflater = getLayoutInflater();
     	}
 
