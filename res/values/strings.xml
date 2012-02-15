@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="empty">Le répertoire est vide</string>
+    <string name="app_name">Repertoire</string>
+    <string name="descr_photo">Photo de l\'utilisateur</string>
+    <string name="name">Nom de l\'utilisateur</string>
+    <string name="phone_number">Numéro de téléphone</string>
+    <string name="gender">Sexe</string>
+    <string name="man">Homme</string>
+    <string name="woman">Femme </string>
+</resources>

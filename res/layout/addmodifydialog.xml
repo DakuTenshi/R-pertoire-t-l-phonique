@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent" >
+
+    <TextView
+        android:id="@+text/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignBottom="@+edit/name"
+        android:text="@string/name"
+        android:layout_marginBottom="10dip"
+        android:layout_marginRight="10dip" />
+
+    <TextView
+        android:id="@+text/phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignBottom="@+edit/phone"
+        android:layout_below="@+text/name"
+        android:layout_alignRight="@+text/name"
+        android:text="@string/phone_number"
+        android:layout_marginBottom="10dip"
+        android:layout_marginRight="10dip" />
+
+    <TextView
+        android:id="@+text/gender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignBottom="@+bouton/gender"
+        android:layout_below="@+text/phone"
+        android:layout_alignRight="@+text/name"
+        android:text="@string/gender"
+        android:layout_marginRight="10dip" />
+    <EditText
+        android:id="@+edit/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+text/name"
+        android:inputType="textPersonName" >
+
+        <requestFocus />
+    </EditText>
+    <EditText
+        android:id="@+edit/phone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+edit/name"
+        android:layout_toRightOf="@+text/phone"
+        android:layout_alignLeft="@+edit/name"
+        android:inputType="phone" />
+    <ToggleButton
+        android:id="@+bouton/gender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+edit/phone"
+        android:layout_toRightOf="@+text/gender"
+        android:layout_alignLeft="@+edit/name"
+        android:textOn="Homme"
+        android:textOff="Femme" />
+
+</RelativeLayout>
