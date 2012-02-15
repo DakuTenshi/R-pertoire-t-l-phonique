@@ -33,7 +33,7 @@ import android.widget.ToggleButton;
 
 public class RepertoireActivity extends ListActivity {
 	private RepertoireAdapter mAdapter = null;
-	private ListView liste = null;
+	private ListView mListView = null;
 	
 	private final static int DIALOG_ADD = 0;
 	private final static int DIALOG_MULTIPLE_DELETE = 1;
@@ -48,8 +48,8 @@ public class RepertoireActivity extends ListActivity {
         setContentView(R.layout.main);
         mAdapter = new RepertoireAdapter();
         
-        liste = getListView();
-        liste.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mListView = getListView();
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
 			@Override
 			public void onItemClick(AdapterView<?> adapter, View v, int position,
@@ -62,7 +62,7 @@ public class RepertoireActivity extends ListActivity {
 			}
 		});
         //Ajouter un menu contextuel à chaque item de la liste
-        registerForContextMenu(liste);
+        registerForContextMenu(mListView);
     }
     
     @Override
@@ -278,7 +278,7 @@ public class RepertoireActivity extends ListActivity {
     	/**
     	 * La liste des contacts de notre répertoire
     	 */
-    	private ArrayList<Contact> liste = new ArrayList<Contact>();
+    	private ArrayList<Contact> mListe = new ArrayList<Contact>();
     	/**
     	 * Le LayoutInflater de notre activité pour récupèrer certaines vues
     	 */
@@ -311,8 +311,8 @@ public class RepertoireActivity extends ListActivity {
     	 */
     	@Override
     	public int getCount() {
-    		if(liste != null)
-    			return liste.size();
+    		if(mListe != null)
+    			return mListe.size();
     		return -1;
     	}
 
@@ -322,8 +322,8 @@ public class RepertoireActivity extends ListActivity {
     	 * @return le contact s'il est trouvé, sinon null
     	 */
     	public Contact getItem(long id) {
-    		if(liste != null )
-    			for(Contact c : liste)
+    		if(mListe != null )
+    			for(Contact c : mListe)
     				if(c.hashCode() == id)
     					return c;
     		return null;
@@ -337,8 +337,8 @@ public class RepertoireActivity extends ListActivity {
     	@Override
     	public Object getItem(int r) {
     		//Si la liste exist et qu'on se trouve dans la liste, on renvoit le contact
-    		if(liste != null && r >= 0 && r < liste.size())
-    			return liste.get(r);
+    		if(mListe != null && r >= 0 && r < mListe.size())
+    			return mListe.get(r);
     		return null;
     	}
 
@@ -366,7 +366,7 @@ public class RepertoireActivity extends ListActivity {
     	public boolean addItem(Contact c)
     	{
     		//On cherche dans tous les contacts de la liste si le contact n'existe pas déjà
-    		for(Contact tmp : liste)
+    		for(Contact tmp : mListe)
     			//si l'identifiant du nouveau contact est déjà dans la liste
     			if(tmp.hashCode() == c.hashCode())
     			{
@@ -374,7 +374,7 @@ public class RepertoireActivity extends ListActivity {
     				return false;
     			}
     		//Si le contact n'est pas déjà dans la liste
-    		liste.add(c);
+    		mListe.add(c);
 			//On indique que l'ensemble de données a été modifié
     		notifyDataSetChanged();
     		return true;
@@ -387,13 +387,13 @@ public class RepertoireActivity extends ListActivity {
     	public void deleteItemId(long id)
     	{
     		//On cherche dans tous les contacts de la liste
-    		for(Contact c : liste)
+    		for(Contact c : mListe)
     		{
     			//Si le contact en cours a l'identifiant précisé
     			if(c.hashCode() == id)
     			{
     				//On supprime l'élément
-    				liste.remove(c);
+    				mListe.remove(c);
     				//On indique que l'ensemble de données a été modifié
     				notifyDataSetChanged();
     				break;
@@ -408,10 +408,10 @@ public class RepertoireActivity extends ListActivity {
     	public void deleteItem(int position)
     	{
     		//Si la liste n'est pas vide et qu'on se trouve bien dans la liste
-    		if(liste != null && position < liste.size())
+    		if(mListe != null && position < mListe.size())
     		{
 				//On supprime l'élément
-    			liste.remove(position);
+    			mListe.remove(position);
 				//On indique que l'ensemble de données a été modifié
 				notifyDataSetChanged();
     		}
@@ -426,10 +426,10 @@ public class RepertoireActivity extends ListActivity {
     		//Liste de la position des éléments sélectionnés
     		ArrayList<Integer> retour = new ArrayList<Integer>();
     		int i = 0;
-    		if(liste != null)
+    		if(mListe != null)
     		{
     			//Pour chaque contact de la liste
-    			for(Contact c : liste)
+    			for(Contact c : mListe)
     			{
     				//Si le contact est sélectionné
     				if(c.isSelected())
@@ -458,9 +458,9 @@ public class RepertoireActivity extends ListActivity {
     			
     			holder = new ViewHolder();
     			//On place les widgets de notre layout dans le holder
-    			holder.nom = (TextView) convertView.findViewById(R.text.nom);
-    			holder.numero = (TextView) convertView.findViewById(R.text.numero);
-    			holder.photo = (ImageView) convertView.findViewById(R.image.photo);
+    			holder.mNom = (TextView) convertView.findViewById(R.text.nom);
+    			holder.mNumero = (TextView) convertView.findViewById(R.text.numero);
+    			holder.mPhoto = (ImageView) convertView.findViewById(R.image.photo);
     			
     			//puis on insère le holder en tant que tag dans le layout
     			convertView.setTag(holder);
@@ -475,12 +475,12 @@ public class RepertoireActivity extends ListActivity {
     		if(c != null)
     		{
     			//On place dans le holder les informations sur le contact
-    			holder.nom.setText(c.getNom());
-    			holder.numero.setText(c.getNumero());
+    			holder.mNom.setText(c.getNom());
+    			holder.mNumero.setText(c.getNumero());
     			if(c.isHomme())
-    				holder.photo.setImageResource(R.drawable.dakutenshi);
+    				holder.mPhoto.setImageResource(R.drawable.dakutenshi);
     			else
-    				holder.photo.setImageResource(R.drawable.dakutenshette);
+    				holder.mPhoto.setImageResource(R.drawable.dakutenshette);
     			//S'il est sélectionné, on change sa couleur de fond
     			if(c.isSelected())
     				convertView.setBackgroundColor(Color.BLUE);
@@ -496,8 +496,8 @@ public class RepertoireActivity extends ListActivity {
      * Classe nécessaire pour le pattern Holder
      */
 	public static class ViewHolder {
-        public TextView nom;
-        public TextView numero;
-        public ImageView photo;
+        public TextView mNom;
+        public TextView mNumero;
+        public ImageView mPhoto;
     }
 }

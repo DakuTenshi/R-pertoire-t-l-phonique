@@ -30,15 +30,6 @@ public class Contact {
 		this.homme = homme;
 	}
 	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((nom == null) ? 0 : nom.hashCode());
-		result = prime * result + ((numero == null) ? 0 : numero.hashCode());
-		return result;
-	}
-	
 	public boolean isSelected() {
 		return selected;
 	}
@@ -51,8 +42,52 @@ public class Contact {
 		this.selected = !this.selected;
 	}
 	
+	/**
+	 * Est-ce que le contact répond aux critères d'intégrité ?
+	 * @return true si le contact est valide
+	 */
 	public boolean isCorrect()
 	{
 		return (this.nom != null && this.nom.compareTo("") != 0 && this.numero != null && this.numero.compareTo("") != 0);
+	}
+	
+	/**
+	 * Fonction de hashage, génère un code unique pour chaque contact
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + (homme ? 1231 : 1237);
+		result = prime * result + ((nom == null) ? 0 : nom.hashCode());
+		result = prime * result + ((numero == null) ? 0 : numero.hashCode());
+		return result;
+	}
+
+	/**
+	 * Permet de savoir si deux contacts sont égaux
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Contact))
+			return false;
+		Contact other = (Contact) obj;
+		if (homme != other.homme)
+			return false;
+		if (nom == null) {
+			if (other.nom != null)
+				return false;
+		} else if (!nom.equals(other.nom))
+			return false;
+		if (numero == null) {
+			if (other.numero != null)
+				return false;
+		} else if (!numero.equals(other.numero))
+			return false;
+		return true;
 	}
 }
