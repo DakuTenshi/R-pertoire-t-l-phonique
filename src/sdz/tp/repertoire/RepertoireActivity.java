@@ -35,13 +35,13 @@ public class RepertoireActivity extends ListActivity {
 	private RepertoireAdapter mAdapter = null;
 	private ListView mListView = null;
 	
+	//Identifiants pour les boîtes de dialogue
 	private final static int DIALOG_ADD = 0;
 	private final static int DIALOG_MULTIPLE_DELETE = 1;
 	private final static int DIALOG_MODIFY = 2;
 	
 	private Contact currentContact = null;
 	
-    /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,8 +81,7 @@ public class RepertoireActivity extends ListActivity {
     		menu.findItem(R.menuItem.multipleDelete).setEnabled(true);
     	else
     		menu.findItem(R.menuItem.multipleDelete).setEnabled(false);
-		return true;
-    	
+		return super.onPrepareOptionsMenu(menu);
     }
     
     @Override
@@ -200,7 +199,6 @@ public class RepertoireActivity extends ListActivity {
     	}
 		retour = builder.create();
 		return retour;
-    	
     }
     
     @Override
@@ -284,55 +282,15 @@ public class RepertoireActivity extends ListActivity {
     		//On récupère le LayoutInflater de notre activité
     		mInflater = getLayoutInflater();
     	}
-
-    	/**
-    	 * Modifier un contact en fonction de son identifiant
-    	 * @param c les nouvelles informations sur le contact
-    	 * @param id l'identifiant du contact à modifier
-    	 */
-    	public void modifyItem(Contact c, long id) {
-    		Contact tmp = getItem(id);
-    		if(tmp != null)
-    		{
-        		tmp.setHomme(c.isHomme());
-        		tmp.setNom(c.getNom());
-        		tmp.setNumero(c.getNumero());
-    			notifyDataSetChanged();
-    		}
-		}
-
-		/**
-    	 * Le nombre de contacts dans la liste
-    	 * @return -1 si la liste est vide, le nombre de contacts sinon
-    	 */
-    	@Override
-    	public int getCount() {
-    		if(mListe != null)
-    			return mListe.size();
-    		return -1;
-    	}
-
-    	/**
-    	 * Recupère un contact en fonction de son identifiant
-    	 * @param id identifiant du contact recherché
-    	 * @return le contact s'il est trouvé, sinon null
-    	 */
-    	public Contact getItem(long id) {
-    		if(mListe != null )
-    			for(Contact c : mListe)
-    				if(c.hashCode() == id)
-    					return c;
-    		return null;
-    	}
     	
     	/**
     	 * Recupère un contact en fonction de sa position
-    	 * @param r la position du contact dans la liste
+    	 * @param r - La position du contact dans la liste
     	 * @return le contact s'il est trouvé, sinon null
     	 */
     	@Override
     	public Object getItem(int r) {
-    		//Si la liste exist et qu'on se trouve dans la liste, on renvoit le contact
+    		//Si la liste existe et que la position est correcte, on renvoit le contact
     		if(mListe != null && r >= 0 && r < mListe.size())
     			return mListe.get(r);
     		return null;
@@ -340,12 +298,12 @@ public class RepertoireActivity extends ListActivity {
 
     	/**
     	 * Récupère l'identifiant d'un élément en fonction de sa position
-    	 * @param position rang de l'élément dans la liste
-    	 * @return l'identifiant de l'élément ou -1 s'il nest pas trouvé
+    	 * @param position - Rang de l'élément dans la liste
+    	 * @return l'identifiant de l'élément ou -1 s'il n'est pas trouvé
     	 */
     	@Override
     	public long getItemId(int position) {
-    		//On essaie de récupère l'élément du rang précisé
+    		//On essaie de récupèrer l'élément du rang précisé
     		Contact e = (Contact) getItem(position);
     		//S'il n'y a pas de contact de ce rang là, on renvoit -1
     		if(e == null)
@@ -355,93 +313,10 @@ public class RepertoireActivity extends ListActivity {
     	}
     	
     	/**
-    	 * Rajouter un contact
-    	 * @param c le contact à rajouter
-    	 * @return true si l'élément a été rajouté
-    	 */
-    	public boolean addItem(Contact c)
-    	{
-    		//On cherche dans tous les contacts de la liste si le contact n'existe pas déjà
-    		for(Contact tmp : mListe)
-    			//si l'identifiant du nouveau contact est déjà dans la liste
-    			if(tmp.hashCode() == c.hashCode())
-    			{
-    				Toast.makeText(RepertoireActivity.this, "Ce contact existe déjà !", Toast.LENGTH_SHORT).show();
-    				return false;
-    			}
-    		//Si le contact n'est pas déjà dans la liste
-    		mListe.add(c);
-			//On indique que l'ensemble de données a été modifié
-    		notifyDataSetChanged();
-    		return true;
-    	}
-    	
-    	/**
-    	 * Supprimer l'élément en précisant son identifiant
-    	 * @param id identifiant de l'élément à supprimer
-    	 */
-    	public void deleteItemId(long id)
-    	{
-    		//On cherche dans tous les contacts de la liste
-    		for(Contact c : mListe)
-    		{
-    			//Si le contact en cours a l'identifiant précisé
-    			if(c.hashCode() == id)
-    			{
-    				//On supprime l'élément
-    				mListe.remove(c);
-    				//On indique que l'ensemble de données a été modifié
-    				notifyDataSetChanged();
-    				break;
-    			}
-    		}
-    	}
-
-    	/**
-    	 * Supprimer l'élément du rang défini
-    	 * @param position le rang de l'élément à supprimer
-    	 */
-    	public void deleteItem(int position)
-    	{
-    		//Si la liste n'est pas vide et qu'on se trouve bien dans la liste
-    		if(mListe != null && position < mListe.size())
-    		{
-				//On supprime l'élément
-    			mListe.remove(position);
-				//On indique que l'ensemble de données a été modifié
-				notifyDataSetChanged();
-    		}
-    	}
-    	
-    	/**
-    	 * Récupérer la liste des positions des éléments sélectionnés
-    	 * @return liste de la position des éléments sélectionnés
-    	 */
-    	public ArrayList<Integer> getListeSelected()
-    	{
-    		//Liste de la position des éléments sélectionnés
-    		ArrayList<Integer> retour = new ArrayList<Integer>();
-    		int i = 0;
-    		if(mListe != null)
-    		{
-    			//Pour chaque contact de la liste
-    			for(Contact c : mListe)
-    			{
-    				//Si le contact est sélectionné
-    				if(c.isSelected())
-    					//On ajoute la position à la liste des positions
-    					retour.add(i);
-        			i++;
-    			}
-    		}
-    		return retour;
-    	}
-    	
-    	/**
     	 * Créer la vue demandée.
-    	 * @param r rang de la vue dans l'adaptateur.
-    	 * @param convertView recyclage de la vue.
-    	 * @param parent le layout dans lequel se trouve le convertView.
+    	 * @param r - Rang de la vue dans l'adaptateur
+    	 * @param convertView - Recyclage de la vue
+    	 * @param parent - Le layout dans lequel se trouve le convertView
     	 */
     	@Override
     	public View getView(int r, View convertView, ViewGroup parent) {
@@ -485,7 +360,129 @@ public class RepertoireActivity extends ListActivity {
     		}
     		return convertView;
     	}
+    	
+    	/**
+    	 * Rajouter un contact
+    	 * @param c - Le contact à rajouter
+    	 * @return true si l'élément a été rajouté
+    	 */
+    	public boolean addItem(Contact c)
+    	{
+    		//On cherche dans tous les contacts de la liste si le contact n'existe pas déjà
+    		for(Contact tmp : mListe)
+    			//si l'identifiant du nouveau contact est déjà dans la liste
+    			if(tmp == c)
+    			{
+    				Toast.makeText(RepertoireActivity.this, "Ce contact existe déjà !", Toast.LENGTH_SHORT).show();
+    				return false;
+    			}
+    		//Si le contact n'est pas déjà dans la liste
+    		mListe.add(c);
+			//On indique que l'ensemble de données a été modifié
+    		notifyDataSetChanged();
+    		return true;
+    	}
 
+    	/**
+    	 * Modifier un contact en fonction de son identifiant
+    	 * @param c - Lles nouvelles informations sur le contact
+    	 * @param id - Identifiant du contact à modifier
+    	 */
+    	public void modifyItem(Contact c, long id) {
+    		Contact tmp = getItem(id);
+    		if(tmp != null)
+    		{
+        		tmp.setHomme(c.isHomme());
+        		tmp.setNom(c.getNom());
+        		tmp.setNumero(c.getNumero());
+    			notifyDataSetChanged();
+    		}
+		}
+    	
+    	/**
+    	 * Supprimer l'élément en précisant son identifiant
+    	 * @param id - Identifiant de l'élément à supprimer
+    	 */
+    	public void deleteItemId(long id)
+    	{
+    		//On cherche dans tous les contacts de la liste
+    		for(Contact c : mListe)
+    		{
+    			//Si le contact en cours a l'identifiant précisé
+    			if(c.hashCode() == id)
+    			{
+    				//On supprime l'élément
+    				mListe.remove(c);
+    				//On indique que l'ensemble de données a été modifié
+    				notifyDataSetChanged();
+    				break;
+    			}
+    		}
+    	}
+
+    	/**
+    	 * Supprimer un élément en fonction de son rang
+    	 * @param position - Rang de l'élément à supprimer
+    	 */
+    	public void deleteItem(int position)
+    	{
+    		//Si la liste n'est pas vide et qu'on se trouve bien dans la liste
+    		if(mListe != null && position < mListe.size())
+    		{
+				//On supprime l'élément
+    			mListe.remove(position);
+				//On indique que l'ensemble de données a été modifié
+				notifyDataSetChanged();
+    		}
+    	}
+
+		/**
+    	 * Le nombre de contacts dans la liste
+    	 * @return -1 si la liste est vide, le nombre de contacts sinon
+    	 */
+    	@Override
+    	public int getCount() {
+    		if(mListe != null)
+    			return mListe.size();
+    		return -1;
+    	}
+
+    	/**
+    	 * Recupère un contact en fonction de son identifiant
+    	 * @param id - Identifiant du contact recherché
+    	 * @return le contact s'il est trouvé, sinon null
+    	 */
+    	public Contact getItem(long id) {
+    		if(mListe != null )
+    			for(Contact c : mListe)
+    				if(c.hashCode() == id)
+    					return c;
+    		return null;
+    	}
+    	
+    	/**
+    	 * Récupérer la liste des positions des éléments sélectionnés
+    	 * @return liste de la position des éléments sélectionnés
+    	 */
+    	public ArrayList<Integer> getListeSelected()
+    	{
+    		//Liste de la position des éléments sélectionnés
+    		ArrayList<Integer> retour = new ArrayList<Integer>();
+    		int i = 0;
+    		if(mListe != null)
+    		{
+    			//Pour chaque contact de la liste
+    			for(Contact c : mListe)
+    			{
+    				//Si le contact est sélectionné
+    				if(c.isSelected())
+    					//On ajoute la position à la liste des positions
+    					retour.add(i);
+        			i++;
+    			}
+    		}
+    		return retour;
+    	}
     }
 	
     /**
